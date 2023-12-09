@@ -1,0 +1,59 @@
+---
+title: "Assignment 3"
+author: "Farrah Ali, Tayaba Saleem, Yichao Jin, Grant Powell, & Hoda Elsafadi"
+date: "2023-09-27"
+categories: [Assignment]
+image: "unnamed-chunk-1-1.png"
+---
+
+```{r}
+library(dplyr)
+
+# Direct link to the OWID COVID-19 data CSV file
+owid_url <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
+
+# Read the CSV data
+owidall <- read.csv(owid_url)
+
+# Deselect cases/rows with OWID 
+owidall <- owidall[!grepl("^OWID", owidall$iso_code), ]  
+
+# Subset by continent: Europe and specific date range
+owideu <- owidall %>%
+  filter(continent == "Europe", 
+         date >= as.Date("2020-01-01") & date <= as.Date("2023-08-31"))
+
+# Convert 'date' to Date class
+owideu$date <- as.Date(owideu$date)
+
+# Load necessary libraries
+library(ggplot2)
+library(scales)  # for formatting dates
+
+# Create a scatterplot matrix with ggplot2
+scatterplot_matrix <- ggplot(owideu, aes(x = date, y = new_deaths)) +
+  geom_point(na.rm = TRUE, color = "deeppink") +  # Exclude missing values from the plot
+  labs(x = "Date", y = "COVID Deaths in Europe (Daily)") +
+  scale_x_date(labels = scales::date_format("%Y-%m"),
+               breaks = seq(as.Date("2020-01-01"), as.Date("2023-08-31"), by = "1 month")) +  # Show every month within the range
+  scale_y_continuous(breaks = c(0, 1000, 2000, 3000, 4000, 5000, 6000, 7000),
+                     labels = c("0", "1000", "", "3000", "", "5000", "", "7000"),
+                     limits = c(0, 7000)) +  # Customize y-axis tick marks and set limits
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        panel.grid.major = element_blank(),  # Remove major gridlines
+        panel.grid.minor = element_blank(),  # Remove minor gridlines
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(color = "black", size = 1, fill = NA),  # Add a border
+        axis.ticks.y = element_line(linewidth = 0.5),  # Show y-axis ticks
+        axis.text.y = element_text(size = 12),  # Adjust y-axis labels size
+        axis.title.y = element_text(size = 12)) +
+  geom_text(aes(x = as.Date("2020-04-15"), y = 6000, label = "Spain"), size = 3) +
+  geom_text(aes(x = as.Date("2020-04-18"), y = 5000, label = "Spain"), size = 3) +
+  geom_text(aes(x = as.Date("2020-12-01"), y = 6500, label = "Germany"), size = 3, hjust = -0.1) +
+  geom_text(aes(x = as.Date("2021-11-01"), y = 5000, label = "Ukraine"), size = 3,  hjust = -0.1) +
+  geom_text(aes(x = as.Date("2023-01-01"), y = 1500, label = "Germany"), size = 3,  hjust = -0.1) +
+  geom_text(aes(x = as.Date("2023-09-20"), y = 500, label = "Italy"), size = 3,  hjust = -0.1)
+
+print(scatterplot_matrix)
+
+```

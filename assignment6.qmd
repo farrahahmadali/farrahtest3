@@ -1,0 +1,17 @@
+---
+title: "Assignment 6"
+author: "Farrah Ali"
+date: "2023-10-13"
+categories: [Assignment]
+image: shinypic.png
+---
+
+Here are the links to my Shiny apps. Thank you!
+
+Running sample data sets app:
+
+<https://ohbmp2-farrahahmadali.shinyapps.io/test/>
+
+My profile app:
+
+<https://ohbmp2-farrahahmadali.shinyapps.io/farrahaliapp/>

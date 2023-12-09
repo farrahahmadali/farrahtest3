@@ -1,0 +1,72 @@
+---
+title: "Assignment 5"
+author: "Farrah Ali"
+date: "2023-10-12"
+categories: [Assignment]
+---
+
+```{r}
+
+library(ggplot2)
+data(diamonds)
+
+#histogram:
+hist(diamonds$price, main = "Histogram of Diamond Prices", xlab = "Price", col = "lightblue", border = "black")
+
+#barchart vertical:
+counts <- table(diamonds$cut)
+barplot(counts, main = "Bar Chart of Diamond Cuts", xlab = "Cut", ylab = "Frequency", col = "lightblue", border = "black")
+
+#barchart horizontal:
+barplot(counts, horiz = TRUE, main = "Horizontal Bar Chart of Diamond Cuts", xlab = "Frequency", ylab = "Cut", col = "lightblue", border = "black")
+
+#piechart:
+pie(counts, main = "Pie Chart of Diamond Cuts", col = rainbow(length(counts)))
+
+#boxplot
+boxplot(price ~ cut, data = diamonds, main = "Boxplot of Diamond Prices by Cut", xlab = "Cut", ylab = "Price", col = "lightblue")
+
+#scatterplot
+plot(diamonds$carat, diamonds$price, main = "Scatterplot of Price vs Carat", xlab = "Carat", ylab = "Price", col = "blue", pch = 16)
+
+#Now using ggplot2:
+
+#histogram:
+histogram <- ggplot(diamonds, aes(price)) + geom_histogram(binwidth=500, fill="lightblue") + ggtitle("Histogram of Diamond Prices")
+print(histogram)
+
+#barchart vertical:
+barvert <- ggplot(diamonds, aes(cut)) + geom_bar(fill="lightblue") + ggtitle("Bar Chart of Diamond Cuts")
+print(barvert)
+
+#barchart horizontal:
+barhori <- ggplot(diamonds, aes(x=cut)) + geom_bar(fill="lightblue") + coord_flip() + ggtitle("Horizontal Bar Chart of Diamond Cuts")
+print(barhori)
+
+#piechart:
+piechart <- ggplot(diamonds, aes(x = "", fill = cut)) + geom_bar(width = 1) + coord_polar(theta = "y") + ggtitle("Pie Chart of Diamond Cuts")
+print(piechart)
+
+#boxplot:
+boxplot <- ggplot(diamonds, aes(x=cut, y=price)) + geom_boxplot(fill="lightblue") + ggtitle("Boxplot of Diamond Prices by Cut")
+print(boxplot)
+
+#scatterplot:
+scatterplot <- ggplot(diamonds, aes(x=carat, y=price)) + geom_point(alpha=0.5, color="blue") + ggtitle("Scatterplot of Price vs Carat")
+print(scatterplot)
+
+#export charts:
+
+#.pdf:
+ggsave(filename="histogram.pdf", plot=histogram)
+
+#.jpg:
+ggsave(filename="barvert.jpg", plot=barvert)
+
+#.tiff:
+ggsave(filename="piechart.tiff", plot=piechart)
+
+#.png
+ggsave(filename="boxplot.png", plot=boxplot)
+
+```
